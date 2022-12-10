@@ -22,22 +22,25 @@ class GTFO_patch_note:
         # Add a content title
         title_text = content_type.value
         title_size = Content.TITLE_SIZE.value
+        title_space = 50
         if content_type == Content.PATCH_TITLE:
             title_size = Content.PATCH_TITLE_SIZE.value
+            title_space = 150
 
         title_font = ImageFont.truetype(Content.TITLE_FONT.value, title_size)
         self.patch_note.text((self.curr_width, self.curr_height), title_text, fill='black', font=title_font)
-        self.curr_height += Content.TITLE_SIZE.value + 20
+        self.curr_height += title_size + title_space
 
         if content_info:
             # Add a content info
             info_font = ImageFont.truetype(Content.INFO_FONT.value, Content.INFO_SIZE.value)
 
-            for info in textwrap.wrap(content_info, width=40):
-                info_text = info
+            for info_text in content_info:
                 self.patch_note.text((self.curr_width, self.curr_height), info_text, fill='black', font=info_font)
-                self.curr_height += Content.INFO_SIZE.value + 10
+                new_line_number = info_text.count('\n') + 1
+                self.curr_height += new_line_number * Content.INFO_SIZE.value + 20
 
+            self.curr_height += 70
     def save_patch_note(self):
         self.new_patch_note.save('translated patch notes/{} 패치 노트.jpg'.format(self.patch_note_date))
 
